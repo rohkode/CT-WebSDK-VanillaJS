@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WebSDK Integration</title>
+
+  <script type="text/javascript">
+    var clevertap = {
+      event: [],
+      profile: [],
+      account: [],
+      onUserLogin: [],
+      notifications: [],
+      privacy: []
+    };
+    // replace with the CLEVERTAP_ACCOUNT_ID with the actual ACCOUNT ID value from your Dashboard.
+    clevertap.account.push({
+      "id": "TEST-K7W-78K-486Z"
+    });
+    clevertap.privacy.push({
+      optOut: false
+    }); //set the flag to true, if the user of the device opts out of sharing their data
+    clevertap.privacy.push({
+      useIP: true
+    }); //set the flag to true, if the user agrees to share their IP data
+    (function () {
+      var wzrk = document.createElement('script');
+      wzrk.type = 'text/javascript';
+      wzrk.async = true;
+      wzrk.src = ('https:' == document.location.protocol ? 'https://d2r1yp2w7bby2u.cloudfront.net' : 'http://static.clevertap.com') + '/js/clevertap.min.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wzrk, s);
+    })();
+  </script>
+
+  <script>
+    navigator.serviceWorker.register('clevertap_sw.js'); //service-worker file
+
+    //Onuserlogin method for identifying users
+    function OnUserLogin() {
+      var email = document.getElementById("email").value;
+      var name = document.getElementById("name").value;
+      var phone = document.getElementById("phone").value;
+      var gender = document.getElementById("gender").value;
+      var identity = document.getElementById("identity").value;
+      alert(name + " " + email + " " + phone + " " + gender);
+      clevertap.onUserLogin.push({
+        "Site": {
+          "Name": name, // String
+          "Identity": identity, // String or number
+          "Email": email, // Email address of the user
+          "Phone": phone, // Phone (with the country code)
+          "Gender": gender, // Can be either M or F
+          "DOB": new Date(), // Date of Birth. Date object
+          // optional fields. controls whether the user will be sent email, push etc.
+          "MSG-email": false, // Disable email notifications
+          "MSG-push": true, // Enable push notifications
+          "MSG-sms": true, // Enable sms notifications
+          "MSG-whatsapp": true, // Enable WhatsApp notifications
+        }
+      })
+    }
+
+    //Triggering a custom event along with OnUserLogin Function
+    function UserLoggedIn() {
+      clevertap.event.push("User Logged In", {
+        "Name": name, // String
+        "Identity": identity, // String or number
+        "Email": email, // Email address of the user
+        "Phone": phone, // Phone (with the country code)
+        "Gender": gender, // Can be either M or F
+      });
+    }
+
+    //Manually Updating Predefined User Profile Properties
+    //https://developer.clevertap.com/docs/concepts-user-profiles#updating-the-user-profile
+    function ProfilePush() {
+      var pushemail = document.getElementById("pushemail").value;
+      var pushname = document.getElementById("pushname").value;
+      var pushphone = document.getElementById("pushphone").value;
+      var pushgender = document.getElementById("pushgender").value;
+      var pushidentity = document.getElementById("pushidentity").value;
+      alert(pushname + " " + pushemail + " " + pushphone + " " + pushgender);
+      clevertap.profile.push({
+        "Site": {
+          "Name": pushname, // String
+          "Identity": pushidentity, // String or number
+          "Email": pushemail, // Email address of the user
+          "Phone": pushphone, // Phone (with the country code)
+          "Gender": pushgender, // Can be either M or F
+          "DOB": new Date(), // Date of Birth. Javascript Date object
+          // optional fields. controls whether the user will be sent email, push etc.
+          "MSG-email": false, // Disable email notifications
+          "MSG-push": true, // Enable push notifications
+          "MSG-sms": true, // Enable sms notifications
+          "MSG-whatsapp": true, // Enable whatsapp notifications
+        }
+      })
+    }
+
+    //Pushing a Custom Event Without any properties
+    function addProduct() {
+      clevertap.event.push("Product Viewed");
+    }
+
+    //Pushing a Custom Event With properties
+    function PDU() {
+      var size = document.getElementById("size").value;
+      var quantity = document.getElementById("quantity").value;
+      var discount = document.getElementById("discount").value;
+      clevertap.event.push("Product Details Updated", {
+        "Size": size,
+        "Quantity": quantity,
+        "Discount Price": discount,
+      })
+    };
+
+    //Pushing a Special Event - Charged with properties
+    function Charged() {
+      clevertap.event.push("Charged", {
+        "Amount": 300,
+        "Payment mode": "Credit Card",
+        "Charged ID": 24052013,
+        "Items": [{
+          "Category": "Books",
+          "Book name": "The Millionaire next door",
+          "Quantity": 1
+        }, {
+          "Category": "Books",
+          "Book name": "Achieving inner zen",
+          "Quantity": 1
+        }, {
+          "Category": "Books",
+          "Book name": "Chuck it, let's do it",
+          "Quantity": 5
+        }]
+      })
+    };
+  </script>
+</head>
+
+<body>
+  <center>
+    <img
+      src="https://lever-client-logos.s3.us-west-2.amazonaws.com/386dfde8-19ac-43a8-84f9-1b5ea2ee02ca-1673346323411.png"
+      width="270" height="150">
+    <h1 style="color:red;">CleverTap Web SDK Integration</h1>
+    <form>
+      <div class="container">
+        <h3> OnUserLogin Form </h3>
+        <h4 style="color:red;"><i>( Note: The "OnUserLogin" function can be used to recognize and grant an identity to
+            an anonymous user visiting your website. )</i></h4>
+        <label>Full Name : </label>
+        <input type="text" id="name" placeholder="Enter Full Name" name="Full Name" required />
+        <br />
+        <br />
+        <label>Identity : </label>
+        <input type="text" id="identity" placeholder="Enter Identity" name="Identity" required />
+        <br />
+        <br />
+        <label>Email : </label>
+        <input type="text" id="email" placeholder="Enter Email" name="Email" required />
+        <br />
+        <br />
+        <label>Phone : </label>
+        <input type="text" id="phone" placeholder="Enter Phone" name="Phone" />
+        <br />
+        <br />
+        <label>Gender : </label>
+        <input type="text" id="gender" placeholder="Enter Your Gender" name="Gender" />
+        <br />
+        <br />
+        <button type="OnUserLogin" onclick="OnUserLogin(); UserLoggedIn();"> OnUserLogin Button</button>
+      </div>
+    </form>
+
+    <form>
+      <div class="container">
+        <h3> ProfilePush Form </h3>
+        <h4 style="color:red;"><i>(Note: The "ProfilePush" function can be used to update the user profiles that have
+            already been identified on the dashboard. )</i></h4>
+        <label>Full Name : </label>
+        <input type="text" id="pushname" placeholder="Enter Full Name" name="Full Name" required />
+        <br />
+        <br />
+        <label>Identity : </label>
+        <input type="text" id="pushidentity" placeholder="Enter Identity" name="Identity" required />
+        <br />
+        <br />
+        <label>Email : </label>
+        <input type="text" id="pushemail" placeholder="Enter Email" name="Email" required />
+        <br />
+        <br />
+        <label>Phone : </label>
+        <input type="text" id="pushphone" placeholder="Enter Phone" name="Phone" />
+        <br />
+        <br />
+        <label>Gender : </label>
+        <input type="text" id="pushgender" placeholder="Enter Your Gender" name="Gender" />
+        <br />
+        <br />
+        <button type="ProfilePush" onclick="ProfilePush();"> ProfilePush Button</button>
+      </div>
+    </form>
+
+    <h3>Clevertap Event Without Properties</h3>
+    <form>
+      <div class="container">
+        <button type="addProduct" onclick="addProduct()"> Product Viewed </button>
+      </div>
+    </form>
+
+    <h3>Clevertap Event Push With Properties</h3>
+    <form>
+      <div class="container">
+        <label>Size : </label>
+        <input type="text" id="size" placeholder="Enter Size" name="Size" required />
+        <br />
+        <br />
+        <label>Quantity : </label>
+        <input type="text" id="quantity" placeholder="Quantity" name="Quantity" required />
+        <br />
+        <br />
+        <label>Discount Price : </label>
+        <input type="text" id="discount" placeholder="Enter a Discount Price" name="Discount Price" required />
+        <br />
+        <br />
+        <button type="PDU" onclick="PDU()">Final Product Details</button>
+      </div>
+    </form>
+    <h3>Clevertap Charged Event</h3>
+    <h4 style="color:red;"><i>( Note: Charged is a special event because it provides a way for you to specify
+        transaction and recording purhcase. )</i></h4>
+    <form>
+      <div class="container">
+        <button type="Charged" onclick="Charged()"> Charged Event Button </button>
+      </div>
+    </form>
+    <div class="pushNotify">
+      <script>
+        pushNotify();
+
+        function pushNotify() {
+          if (!("Notification" in window)) {
+            // checking if the user's browser supports web push Notification
+            alert("Web browser does not support desktop notification");
+          } else if (Notification.permission === "granted") {
+            console.log("Permission to show web push notifications granted.");
+            // if notification permissions is granted,
+            // then create a Notification object
+            pushNotify();
+          } else if (Notification.permission !== "denied") {
+            alert("Going to ask for permission to show web push notification");
+            // User should give explicit permission
+            Notification.requestPermission().then((permission) => {
+              // If the user accepts, let's create a notification
+              pushNotify();
+            });
+          }
+          // User has not granted to show web push notifications via Browser
+          // Let's honor his decision and not keep pestering anymore
+        }
+
+        function pushNotify() {
+          clevertap.notifications.push({
+            "titleText": "Notification Prompt",
+            "bodyText": "Hey, would you like to receive our notifications?",
+            "okButtonText": "Allow",
+            "rejectButtonText": "Reject",
+            "okButtonColor": "#DD6B55"
+          });
+          // url that needs to be opened on clicking the notification
+          // finally everything boils down to click and visits right
+          /*notification.onclick = pushNotify()
+            window.open('https://rocketshipstack.000webhostapp.com');*/
+        }
+      </script>
+    </div>
+  </center>
+</body>
+
+</html>
