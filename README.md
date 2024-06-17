@@ -1,13 +1,13 @@
 # CT-WebSDK-React
 
 ## Introduction
-This repository contains a sample project demonstrating the integration of CleverTap Web SDK with a React application. The CleverTap Web SDK enables powerful user engagement and analytics capabilities for web applications.
+This repository contains a sample project demonstrating the integration of CleverTap Web SDK with your website. The CleverTap Web SDK enables powerful user engagement and analytics capabilities for web applications.
 
 ## Prerequisites
 Before you begin, make sure you have a CleverTap account. If you don't have one, you can [sign up for free](https://clevertap.com/signup) on the CleverTap website.
 
 ## Getting Started
-To integrate CleverTap Web SDK into your React application, follow these steps:
+To integrate CleverTap Web SDK into your website, follow these steps:
 
 1. **Include CleverTap Web SDK**: Add the CleverTap Web SDK script to your HTML file's `<head>` section. Make sure to replace "886-85W-7Z7Z" with your CleverTap account ID.
 
@@ -67,8 +67,8 @@ function pushNotify() {
 }
 ```
 
-6. **Run Your Application**: Start your React application and test the integration with CleverTap Web SDK.
+6. **Run Your Website**: Refresh your Website and test the integration with CleverTap Web SDK.
 
 ## Resources
-- [CleverTap Documentation](https://developer.clevertap.com/docs)
+- [CleverTap Documentation](https://developer.clevertap.com/docs/web-quickstart-guide)
 - [CleverTap Dashboard](https://dashboard.clevertap.com)
