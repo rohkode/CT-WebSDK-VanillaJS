@@ -9,31 +9,23 @@ Before you begin, make sure you have a CleverTap account. If you don't have one,
 ## Getting Started
 To integrate CleverTap Web SDK into your React application, follow these steps:
 
-1. **Include CleverTap Web SDK**: Add the CleverTap Web SDK script to your HTML file's `<head>` section.
+1. **Include CleverTap Web SDK**: Add the CleverTap Web SDK script to your HTML file's `<head>` section. Make sure to replace "886-85W-7Z7Z" with your CleverTap account ID.
 
 ```html
-<script type="text/javascript">
-  var clevertap = { event: [], profile: [], account: [], onUserLogin: [], notifications: [], privacy: [] };
-  clevertap.account.push({"id": "YOUR_ACCOUNT_ID"});
-  clevertap.privacy.push({optOut: false}); 
-  clevertap.privacy.push({useIP: true});
-  // Include CleverTap Web SDK script
-</script>
-```
-
-2. **Initialize CleverTap**: Initialize CleverTap with your account ID.
-
-```html
-<script>
-  (function () {
-    var wzrk = document.createElement('script');
-    wzrk.type = 'text/javascript';
-    wzrk.async = true;
-    wzrk.src = ('https:' == document.location.protocol ? 'https://d2r1yp2w7bby2u.cloudfront.net' : 'http://static.clevertap.com') + '/js/clevertap.min.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wzrk, s);
-  })();
-</script>
+  <script type="text/javascript">
+    var clevertap = { event: [], profile: [], account: [], onUserLogin: [], notifications: [], privacy: [] };
+    clevertap.account.push({"id": "886-85W-7Z7Z"});
+    clevertap.privacy.push({optOut: false}); 
+    clevertap.privacy.push({useIP: true});
+    (function () {
+      var wzrk = document.createElement('script');
+      wzrk.type = 'text/javascript';
+      wzrk.async = true;
+      wzrk.src = ('https:' == document.location.protocol ? 'https://d2r1yp2w7bby2u.cloudfront.net' : 'http://static.clevertap.com') + '/js/clevertap.min.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wzrk, s);
+    })();
+  </script>
 ```
 
 3. **Define Functions**: Define functions to handle user login, profile update, and event tracking.
