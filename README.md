@@ -4,17 +4,17 @@
 This repository contains a sample project demonstrating the integration of CleverTap Web SDK with your website. The CleverTap Web SDK enables powerful user engagement and analytics capabilities for web applications.
 
 ## Prerequisites
-Before you begin, make sure you have a CleverTap account. If you don't have one, you can [sign up for free](https://clevertap.com/signup) on the CleverTap website.
+Before you begin, make sure you have a CleverTap account. If you don't have one, you can [sign up here](https://clevertap.com/) on the CleverTap website.
 
 ## Getting Started
 To integrate CleverTap Web SDK into your website, follow these steps:
 
-1. **Include CleverTap Web SDK**: Add the CleverTap Web SDK script to your HTML file's `<head>` section. Make sure to replace "886-85W-7Z7Z" with your CleverTap account ID.
+1. **Include CleverTap Web SDK**: Add the CleverTap Web SDK script to your HTML file's `<head>` section. Make sure to replace "CLEVERTAP_ACCOUNT_ID" with your CleverTap account ID.
 
 ```html
   <script type="text/javascript">
     var clevertap = { event: [], profile: [], account: [], onUserLogin: [], notifications: [], privacy: [] };
-    clevertap.account.push({"id": "886-85W-7Z7Z"});
+    clevertap.account.push({"id": "CLEVERTAP_ACCOUNT_ID"});
     clevertap.privacy.push({optOut: false}); 
     clevertap.privacy.push({useIP: true});
     (function () {
