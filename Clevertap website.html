@@ -7,24 +7,10 @@
   <title>WebSDK Integration</title>
 
   <script type="text/javascript">
-    var clevertap = {
-      event: [],
-      profile: [],
-      account: [],
-      onUserLogin: [],
-      notifications: [],
-      privacy: []
-    };
-    // replace with the CLEVERTAP_ACCOUNT_ID with the actual ACCOUNT ID value from your Dashboard.
-    clevertap.account.push({
-      "id": "TEST-K7W-78K-486Z"
-    });
-    clevertap.privacy.push({
-      optOut: false
-    }); //set the flag to true, if the user of the device opts out of sharing their data
-    clevertap.privacy.push({
-      useIP: true
-    }); //set the flag to true, if the user agrees to share their IP data
+    var clevertap = { event: [], profile: [], account: [], onUserLogin: [], notifications: [], privacy: [] };
+    clevertap.account.push({"id": "886-85W-7Z7Z"});
+    clevertap.privacy.push({optOut: false}); 
+    clevertap.privacy.push({useIP: true});
     (function () {
       var wzrk = document.createElement('script');
       wzrk.type = 'text/javascript';
@@ -35,74 +21,60 @@
     })();
   </script>
 
+  <!--service-worker file-->
   <script>
-    navigator.serviceWorker.register('clevertap_sw.js'); //service-worker file
+    navigator.serviceWorker.register('clevertap_sw.js').then(function (registration) {
+      console.log('Service worker registered with scope:', registration.scope);
+    }).catch(function (error) {
+      console.log('Service worker registration failed:', error);
+    }); 
 
-    //Onuserlogin method for identifying users
+  //Onuserlogin method for identifying users
     function OnUserLogin() {
       var email = document.getElementById("email").value;
       var name = document.getElementById("name").value;
       var phone = document.getElementById("phone").value;
       var gender = document.getElementById("gender").value;
       var identity = document.getElementById("identity").value;
-      alert(name + " " + email + " " + phone + " " + gender);
+      console.log(name + " " + email + " " + phone + " " + gender);
       clevertap.onUserLogin.push({
         "Site": {
-          "Name": name, // String
-          "Identity": identity, // String or number
-          "Email": email, // Email address of the user
-          "Phone": phone, // Phone (with the country code)
-          "Gender": gender, // Can be either M or F
-          "DOB": new Date(), // Date of Birth. Date object
-          // optional fields. controls whether the user will be sent email, push etc.
-          "MSG-email": false, // Disable email notifications
-          "MSG-push": true, // Enable push notifications
-          "MSG-sms": true, // Enable sms notifications
-          "MSG-whatsapp": true, // Enable WhatsApp notifications
+          "Name": name, 
+          "Identity": identity, 
+          "Email": email, 
+          "Phone": phone,
+          "Gender": gender, 
+          "DOB": new Date(),
+          "MSG-email": false, 
+          "MSG-push": true, 
+          "MSG-sms": true,
+          "MSG-whatsapp": true,
         }
       })
-    }
+    }    
 
     //Triggering a custom event along with OnUserLogin Function
-    function UserLoggedIn() {
-      clevertap.event.push("User Logged In", {
-        "Name": name, // String
-        "Identity": identity, // String or number
-        "Email": email, // Email address of the user
-        "Phone": phone, // Phone (with the country code)
-        "Gender": gender, // Can be either M or F
-      });
-    }
+      function UserLoggedIn() {
+        clevertap.event.push("User Logged In", {
+        });
+      }
 
-    //Manually Updating Predefined User Profile Properties
-    //https://developer.clevertap.com/docs/concepts-user-profiles#updating-the-user-profile
+    //Custom User Profile Properties
     function ProfilePush() {
-      var pushemail = document.getElementById("pushemail").value;
-      var pushname = document.getElementById("pushname").value;
-      var pushphone = document.getElementById("pushphone").value;
-      var pushgender = document.getElementById("pushgender").value;
-      var pushidentity = document.getElementById("pushidentity").value;
-      alert(pushname + " " + pushemail + " " + pushphone + " " + pushgender);
+      var loyaltyStatus = document.getElementById("loyaltyStatus").value;
+      var petOwner = document.getElementById("petOwner").value;
       clevertap.profile.push({
         "Site": {
-          "Name": pushname, // String
-          "Identity": pushidentity, // String or number
-          "Email": pushemail, // Email address of the user
-          "Phone": pushphone, // Phone (with the country code)
-          "Gender": pushgender, // Can be either M or F
-          "DOB": new Date(), // Date of Birth. Javascript Date object
-          // optional fields. controls whether the user will be sent email, push etc.
-          "MSG-email": false, // Disable email notifications
-          "MSG-push": true, // Enable push notifications
-          "MSG-sms": true, // Enable sms notifications
-          "MSG-whatsapp": true, // Enable whatsapp notifications
+          "Loyalty Status": loyaltyStatus,
+          "Pet owner": petOwner,
         }
       })
     }
 
     //Pushing a Custom Event Without any properties
     function addProduct() {
-      clevertap.event.push("Product Viewed");
+      console.log("Category Viewed");
+      clevertap.event.push("Category Viewed");
     }
 
     //Pushing a Custom Event With properties
@@ -110,6 +82,7 @@
       var size = document.getElementById("size").value;
       var quantity = document.getElementById("quantity").value;
       var discount = document.getElementById("discount").value;
+      console.log("Product details - Size:", size, "Quantity:", quantity, "Discount Price:", discount);
       clevertap.event.push("Product Details Updated", {
         "Size": size,
         "Quantity": quantity,
@@ -137,12 +110,13 @@
           "Quantity": 5
         }]
       })
+      console.log("Charging event data pushed to CleverTap.");
     };
   </script>
 </head>
 
 <body>
-  <center>
+<center>
     <img
       src="https://lever-client-logos.s3.us-west-2.amazonaws.com/386dfde8-19ac-43a8-84f9-1b5ea2ee02ca-1673346323411.png"
       width="270" height="150">
@@ -181,38 +155,28 @@
         <h3> ProfilePush Form </h3>
         <h4 style="color:red;"><i>(Note: The "ProfilePush" function can be used to update the user profiles that have
             already been identified on the dashboard. )</i></h4>
-        <label>Full Name : </label>
-        <input type="text" id="pushname" placeholder="Enter Full Name" name="Full Name" required />
-        <br />
-        <br />
-        <label>Identity : </label>
-        <input type="text" id="pushidentity" placeholder="Enter Identity" name="Identity" required />
-        <br />
-        <br />
-        <label>Email : </label>
-        <input type="text" id="pushemail" placeholder="Enter Email" name="Email" required />
-        <br />
-        <br />
-        <label>Phone : </label>
-        <input type="text" id="pushphone" placeholder="Enter Phone" name="Phone" />
-        <br />
-        <br />
-        <label>Gender : </label>
-        <input type="text" id="pushgender" placeholder="Enter Your Gender" name="Gender" />
-        <br />
-        <br />
+            <label>Loyalty Status : </label>
+            <input type="text" id="loyaltyStatus" placeholder="Enter Loyalty Status" name="Loyalty Status" />
+            <br />
+            <br />
+            <label>Pet Owner : </label>
+            <input type="text" id="petOwner" placeholder="Are you a Pet Owner?" name="Pet Owner" />
+            <br />
+            <br />
         <button type="ProfilePush" onclick="ProfilePush();"> ProfilePush Button</button>
       </div>
     </form>
 
     <h3>Clevertap Event Without Properties</h3>
+    <h4 style="color:red;"><i>( Note: You can trigger an event for action tracking. )</i></h4>
     <form>
       <div class="container">
-        <button type="addProduct" onclick="addProduct()"> Product Viewed </button>
+        <button type="addProduct" onclick="addProduct()"> Category Viewed </button>
       </div>
     </form>
 
     <h3>Clevertap Event Push With Properties</h3>
+    <h4 style="color:red;"><i>( Note: You can trigger the event along with the properties. )</i></h4>
     <form>
       <div class="container">
         <label>Size : </label>
@@ -279,6 +243,29 @@
       </script>
     </div>
   </center>
+
+  <div id="main-content" class="text-body">
+    <div id="top-bar">
+        <!-- CleverTap Web Inbox START -->
+        <span id="inbox" style="position: absolute; top: 30px; right: 40px; width: 100px; text-align:right;">
+          <img src="https://icones.pro/wp-content/uploads/2022/02/icone-de-cloche-rouge.png" alt="Web Inbox" style="width: 40px; height: 40px; vertical-align: middle;"></span>
+      </div>
+  </div>
+  
+  <div>Web Native Display Fallback Image</div>
+    <div id="native-display-container" class="native-display-container">
+        <!-- CleverTap Web Native Display Fallback Image START -->
+        <img class="img-native-display" src="https://logowik.com/content/uploads/images/clevertap5229.jpg" width="350" height="200" />
+    </div>
+
+
+    
+    
 </body>
 
 </html>
+
+    <!-- http://localhost:5500/Clevertap%20website.html-->
+
+
+    
