@@ -50,14 +50,12 @@
           "MSG-sms": true,
           "MSG-whatsapp": true,
         }
-      })
-    }    
+      });
 
     //Triggering a custom event along with OnUserLogin Function
-      function UserLoggedIn() {
-        clevertap.event.push("User Logged In", {
-        });
-      }
+      clevertap.event.push("User Logged In", {});
+
+    }    
 
     //Custom User Profile Properties
     function ProfilePush() {
@@ -146,7 +144,7 @@
         <input type="text" id="gender" placeholder="Enter Your Gender" name="Gender" />
         <br />
         <br />
-        <button type="OnUserLogin" onclick="OnUserLogin(); UserLoggedIn();"> OnUserLogin Button</button>
+        <button type="OnUserLogin" onclick="OnUserLogin();"> OnUserLogin Button</button>
       </div>
     </form>
 
