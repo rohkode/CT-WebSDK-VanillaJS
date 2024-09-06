@@ -61,10 +61,12 @@
     function ProfilePush() {
       var loyaltyStatus = document.getElementById("loyaltyStatus").value;
       var petOwner = document.getElementById("petOwner").value;
+      var phone1 = document.getElementById("phone1").value;
       clevertap.profile.push({
         "Site": {
           "Loyalty Status": loyaltyStatus,
           "Pet owner": petOwner,
+          "Phone": phone1,
         }
       })
     }
@@ -159,6 +161,10 @@
             <br />
             <label>Pet Owner : </label>
             <input type="text" id="petOwner" placeholder="Are you a Pet Owner?" name="Pet Owner" />
+            <br />
+            <br />
+            <label>Phone : </label>
+            <input type="text" id="phone1" placeholder="Enter Phone" name="Phone" />
             <br />
             <br />
         <button type="ProfilePush" onclick="ProfilePush();"> ProfilePush Button</button>
